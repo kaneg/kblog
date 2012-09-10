@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <package name="bill" namespace="/bill" extends="struts-default">
+        <result-types>
+            <result-type name="main" class="org.apache.struts2.dispatcher.ServletActionRedirectResult">
+                <param name="namespace">/bill</param>
+                <param name="actionName">main</param>
+            </result-type>
+        </result-types>
+        <action name="main">
+            <result>main.jsp</result>
+        </action>
+        <action name="add_bill_view">
+            <result>add_bill_view.jsp</result>
+        </action>
+        <action name="edit_bill_view">
+            <result>edit_bill_view.jsp</result>
+        </action>
+        <action name="add_bill" class="gz.aws.bill.action.BillAction" method="addBill">
+            <result>add_bill_action.jsp</result>
+        </action>
+        <action name="edit_bill" class="gz.aws.bill.action.BillAction" method="editBill">
+            <result>edit_bill_action.jsp</result>
+        </action>
+        <action name="delete_bill" class="gz.aws.bill.action.BillAction" method="deleteBill">
+            <result type="main">
+                <param name="page">list_bill</param>
+                <param name="isIn">${isIn}</param>
+            </result>
+        </action>
+
+        <action name="edit_bill_type_view">
+            <result>edit_bill_type_view.jsp</result>
+        </action>
+        <action name="add_bill_type" class="gz.aws.bill.action.BillAction" method="addBillType">
+            <result type="plainText"/>
+        </action>
+        <action name="edit_bill_type" class="gz.aws.bill.action.BillAction" method="editBillType">
+            <result>edit_bill_type_action.jsp</result>
+        </action>
+        <action name="delete_bill_type" class="gz.aws.bill.action.BillAction" method="deleteBillType">
+            <result type="main">
+                <param name="page">list_bill_type</param>
+            </result>
+        </action>
+    </package>
+</struts>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+				http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+    <context:property-placeholder location="WEB-INF/jdbc.properties"/>
+    <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
+    <bean id="dataSource" class="com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource">
+        <property name="url" value="${jdbc.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+
+    <!-- Transaction manager for a single JDBC DataSource -->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <!-- Activates @Transactional for DefaultImageDatabase -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!--<bean id="emfactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">-->
+    <!--<property name="persistenceProviderClass"-->
+    <!--value="org.datanucleus.store.appengine.jpa.DatastorePersistenceProvider"/>-->
+    <!--<property name="persistenceUnitName" value="blog"/>-->
+    <!--</bean>-->
+    <bean id="file_data_manager" class="gz.aws.blog.impl.FileDataManagerImpl" scope="prototype"/>
+    <!--<bean id="cached_file_data_manager" class="gz.aws.blog.impl.CachedFileDataManager" scope="prototype"/>-->
+    <bean id="blog_manager" class="gz.aws.blog.impl.PermissionBlogManager" scope="prototype"/>
+    <bean id="CommentManager" class="gz.aws.blog.impl.CommentManagerImpl" scope="prototype"/>
+    <bean id="MoodManager" class="gz.aws.blog.impl.MoodManagerImpl" scope="prototype"/>
+    <bean id="PreferenceManager" class="gz.aws.blog.impl.PreferenceManagerImpl" scope="prototype"/>
+    <bean id="PhotoManager" class="gz.aws.blog.impl.PhotoManagerImpl" scope="prototype"/>
+    <bean id="UserManager" class="gz.aws.blog.impl.UserManagerImpl" scope="prototype"/>
+    <bean id="BillManager" class="gz.aws.bill.dao.BillManagerImpl" scope="prototype"/>
+    <bean id="BillTypeManager" class="gz.aws.bill.dao.BillTypeManagerImpl" scope="prototype"/>
+    <bean id="album_manager" class="gz.aws.blog.impl.AlbumManagerImpl" scope="prototype"/>
+</beans>

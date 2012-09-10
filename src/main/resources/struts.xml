@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <constant name="struts.devMode" value="true"/>
+    <constant name="struts.action.extension" value="action"/>
+    <include file="struts-bill.xml"/>
+    <package name="common" extends="struts-default">
+        <result-types>
+            <result-type name="main" class="gz.aws.blog.action.MyMainResultType">
+                <param name="namespace">/blog</param>
+                <param name="actionName">main</param>
+            </result-type>
+        </result-types>
+    </package>
+    <package name="blog" extends="common" namespace="/blog">
+        <result-types>
+            <result-type name="feed" class="gz.aws.blog.feed.RomeResult"/>
+        </result-types>
+        <action name="index">
+            <result type="redirectAction">main</result>
+        </action>
+        <action name="main">
+            <result>main.jsp</result>
+        </action>
+        <action name="feed" class="gz.aws.blog.action.CreateFeedAction">
+            <result type="feed">
+                <param name="encoding">utf-8</param>
+            </result>
+        </action>
+        <action name="list_mymood" class="gz.aws.blog.action.MoodAction" method="list">
+            <result name="success">admin/list_mymood.jsp</result>
+        </action>
+        <action name="add_comment" class="gz.aws.blog.action.CommentAction" method="add">
+            <result type="main">
+                <param name="pageType">view</param>
+                <param name="bId">${bId}</param>
+            </result>
+        </action>
+        <action name="login_view">
+            <result>login_view.jsp</result>
+        </action>
+        <action name="login" class="gz.aws.blog.action.LoginAction" method="login">
+            <result type="main"/>
+            <result name="input">login_view.jsp</result>
+            <result name="error">login_failed.jsp</result>
+        </action>
+    </package>
+
+    <package name="blog_admin" extends="common" namespace="/blog/admin">
+        <action name="update_blog_view">
+            <result>update_blog_view.jsp</result>
+        </action>
+        <action name="add_blog_view">
+            <result>add_blog_view.jsp</result>
+        </action>
+        <action name="send_blog_to_mail">
+            <result>send_blog_to_mail.jsp</result>
+        </action>
+        <action name="add_blog" class="gz.aws.blog.action.BlogAction" method="add">
+            <result type="main"/>
+        </action>
+        <action name="update_blog" class="gz.aws.blog.action.BlogAction" method="update">
+            <result type="main"/>
+        </action>
+        <action name="delete_blog" class="gz.aws.blog.action.BlogAction" method="delete">
+            <result type="main"/>
+        </action>
+    </package>
+    <package name="user" extends="common" namespace="/blog/admin">
+        <action name="add_user_view">
+            <result>add_user_view.jsp</result>
+        </action>
+        <action name="logout" class="gz.aws.blog.action.LoginAction" method="logout">
+            <result type="main"/>
+        </action>
+        <action name="index" class="gz.aws.blog.action.UserAction" method="index">
+            <result>index.jsp</result>
+        </action>
+        <action name="list_user" class="gz.aws.blog.action.UserAction" method="list">
+            <result>list_user_view.jsp</result>
+        </action>
+        <action name="delete_user" class="gz.aws.blog.action.UserAction" method="delete">
+            <result>list_user_view.jsp</result>
+        </action>
+        <action name="add_user" class="gz.aws.blog.action.UserAction" method="add">
+            <result type="redirectAction">list_user</result>
+        </action>
+        <action name="update_user_view">
+            <result>update_user_view.jsp</result>
+        </action>
+        <action name="update_user" class="gz.aws.blog.action.UserAction" method="update">
+            <result type="redirectAction">list_user</result>
+        </action>
+    </package>
+    <package name="photo" extends="common" namespace="/blog/admin">
+        <interceptors>
+            <interceptor name="gaeFileUpload" class="gz.aws.blog.file.PhotoUploadInterceptor"/>
+            <interceptor-stack name="gaeFileUploadStack">
+                <interceptor-ref name="gaeFileUpload"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        <action name="add_photo_view">
+            <result>add_photo_view.jsp</result>
+        </action>
+        <action name="photo_slider">
+            <result>../photo_slider.jsp</result>
+        </action>
+        <action name="add_photo" class="gz.aws.blog.action.PhotoAction" method="add">
+            <interceptor-ref name="gaeFileUploadStack"/>
+            <result type="main">
+                <param name="pageType">list_photo</param>
+            </result>
+        </action>
+        <action name="delete_photo" class="gz.aws.blog.action.PhotoAction" method="delete">
+            <result type="main">
+                <param name="pageType">list_photo</param>
+            </result>
+        </action>
+        <action name="resize_photo" class="gz.aws.blog.action.PhotoAction" method="resize">
+            <result type="main">
+                <param name="pageType">list_photo</param>
+            </result>
+        </action>
+        <action name="view_photo_realtime" class="gz.aws.blog.action.PhotoAction" method="view">
+            <result type="stream">
+                <param name="contentType">image/jpeg</param>
+            </result>
+        </action>
+        <action name="view_photo" class="gz.aws.blog.action.PhotoAction" method="viewWithCache">
+            <result type="main"/>
+        </action>
+        <action name="update_photo" class="gz.aws.blog.action.PhotoAction" method="update">
+            <result type="stream"/>
+        </action>
+    </package>
+    <package name="mood" extends="common" namespace="/blog/admin">
+        <action name="change_mood" class="gz.aws.blog.action.MoodAction" method="change">
+            <result type="stream"/>
+        </action>
+        <action name="delete_mood" class="gz.aws.blog.action.MoodAction" method="delete">
+            <result type="main">
+                <param name="pageType">list_mood</param>
+            </result>
+        </action>
+    </package>
+    <package name="pref" extends="common" namespace="/blog/admin">
+        <interceptors>
+            <interceptor name="gaeFileUpload" class="gz.aws.blog.file.GaeFileUploadInterceptor"/>
+            <interceptor-stack name="gaeFileUploadStack">
+                <interceptor-ref name="gaeFileUpload"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        <action name="update_pref_view">
+            <result>update_preference_view.jsp</result>
+        </action>
+
+        <action name="update_myPic" class="gz.aws.blog.action.PrefAction" method="updateMyPic">
+            <interceptor-ref name="gaeFileUploadStack"/>
+            <result type="main">
+                <param name="pageType">pref</param>
+            </result>
+        </action>
+        <action name="update_myMusic" class="gz.aws.blog.action.PrefAction" method="updateMyMusic">
+            <interceptor-ref name="gaeFileUploadStack"/>
+            <result type="main">
+                <param name="pageType">pref</param>
+            </result>
+        </action>
+    </package>
+    <package name="comment" extends="common" namespace="/blog/admin">
+        <action name="delete_comment" class="gz.aws.blog.action.CommentAction" method="delete">
+            <result type="main">
+                <param name="pageType">view</param>
+                <param name="bId">${bId}</param>
+            </result>
+        </action>
+    </package>
+    <package name="album" extends="common" namespace="/blog/admin">
+        <action name="add_album_view">
+            <result>add_album_view.jsp</result>
+        </action>
+        <action name="add_album" class="gz.aws.blog.action.AlbumAction" method="add">
+            <result type="main">
+                <param name="pageType">list_album</param>
+            </result>
+        </action>
+        <action name="delete_album" class="gz.aws.blog.action.AlbumAction" method="delete">
+            <result type="main">
+                <param name="pageType">list_album</param>
+            </result>
+        </action>
+        <action name="update_album" class="gz.aws.blog.action.AlbumAction" method="update">
+            <result type="main">
+                <param name="pageType">list_album</param>
+            </result>
+        </action>
+    </package>
+</struts>

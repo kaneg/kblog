@@ -1,0 +1,1 @@
+<% response.sendRedirect("blog/index.action");%>

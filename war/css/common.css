@@ -1,0 +1,48 @@
+.list_table {
+    width: 100%;
+    padding: 0.35em 1em 0.25em 0.35em;
+}
+
+.list_table .t_tr {
+
+}
+
+.list_table .t_td {
+    text-align: left;
+    border-bottom: 1px solid #C5D7EF;
+}
+
+.list_table th {
+    background: #C5D7EF none repeat scroll 0 0;
+}
+
+.left_side {
+    float: left;
+    width: 160px;
+    border-right: 3px solid cornflowerblue
+}
+
+.main_body {
+    margin: 0 0 0 180px;
+}
+
+body {
+    color: black;
+    font-family: Arial, sans-serif, Helvetica, Tahoma;
+    font-size: 12px;
+    line-height: 1.5;
+    text-align: left;
+}
+body, input, textarea, button, select {
+    font-family: 'Helvetica Neue','Helvetica Neue',Helvetica,'Hiragino Sans GB','Microsoft Yahei',Arial;
+    font-size: 12px;
+}
+body {
+    color: #5C5C5C;
+}
+body, input, textarea, button, select {
+    font-family: 'Helvetica Neue','Helvetica Neue',Helvetica,'Hiragino Sans GB','Microsoft Yahei',Arial;
+    font-family: 'Helvetica Neue','Helvetica Neue',Helvetica,'Hiragino Sans GB','Microsoft Yahei',Arial;
+    font-size: 12px;
+    font-size: 12px;
+}
