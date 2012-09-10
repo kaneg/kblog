@@ -1,6 +1,10 @@
 *.class
-
+.svn
+.idea
+.DS_Store
+.gitignore
 # Package Files #
 *.jar
 *.war
 *.ear
+*.iml
